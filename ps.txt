@@ -130,6 +130,44 @@ This is the JSON message structure sent from EVM frontend to Solana LayerZero OA
 * Record video demo of linking and verifying process
 * Show LayerZeroScan transaction hashes as proof
 
+## 📝 Project Build Instructions
+
+### 1️⃣ Set up LayerZero Solana OApp Example
+
+* Clone LayerZero OApp Solana example:
+  `git clone https://github.com/LayerZero-Labs/devtools`
+* Go to example folder:
+  `cd devtools/examples/oapp-solana`
+* Install Rust toolchain + Solana CLI if not already:
+  `anchor --version`
+  `solana --version`
+* Install dependencies:
+  `anchor build`
+* Deploy to Solana Devnet:
+  `anchor deploy --provider.cluster devnet`
+
+### 2️⃣ Customize Program Logic
+
+* Inside `/programs/oapp/src/lib.rs`, modify the message handler to:
+
+  * Accept EVM address string
+  * Store/update `IdentityAccount` PDA
+* Update instruction definitions as needed
+* Run `anchor build` and `anchor deploy` again
+
+### 3️⃣ Set up Frontend
+
+* Use React + Vite 
+* Install Solana wallet adapter: `@solana/wallet-adapter-react`
+* Install EVM wallet connectors: `wagmi`, `viem`, `ethers.js`
+* Implement wallet connect, message signing, and API calls to LayerZero endpoint for cross-chain messaging
+
+### 4️⃣ Demo Proof
+
+* After linking wallets, retrieve PDA data using Solana RPC calls via `@solana/web3.js`
+* Show linked addresses visually
+* Show LayerZeroScan transaction hashes proving successful relays
+
 ## ✅ Submission Checklist
 
 * [ ] Solana LayerZero V2 program deployed and working
@@ -139,4 +177,4 @@ This is the JSON message structure sent from EVM frontend to Solana LayerZero OA
 * [ ] Video walkthrough demo
 * [ ] LayerZeroScan proof hash
 
-**This version is tailored for AI coders, providing clear code structure, examples, architecture, data formats, and system flow.**
+**This version is fully AI-implementable, with detailed code references, instructions, examples, and test steps.**
