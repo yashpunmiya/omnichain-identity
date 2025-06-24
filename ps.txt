@@ -1,0 +1,142 @@
+# 📑 Omnichain Identity Linker — Comprehensive AI-Ready Build Spec for LayerZero Solana Breakout Bounty
+
+## 📖 Overview
+
+This project enables users to link their EVM-based blockchain wallets (Ethereum, Polygon, BSC, etc.) with their Solana wallets on-chain via LayerZero V2’s omnichain messaging. The Solana program will store these linked addresses inside a Solana PDA (Program Derived Address) account, forming a decentralized identity registry. DAOs, DeFi platforms, games, or NFT marketplaces can query this identity registry to verify linked wallets and assign cross-chain perks or permissions.
+
+## 📦 Tech Stack
+
+* **Solana**: Anchor framework for the Solana program (OApp)
+* **EVM Chains**: Ethereum-compatible chains like Ethereum, Polygon, Avalanche, etc.
+* **LayerZero V2**: Omnichain messaging protocol connecting EVM to Solana
+* **Frontend**: React with Solana and EVM wallet adapters
+* **EVM Public JSON-RPC APIs**: For balance/NFT verification via services like Alchemy, Infura, or free RPC endpoints
+
+## 📚 Required Docs & Repos
+
+* **LayerZero Solana OApp Docs**: [https://docs.layerzero.network/v2/developers/solana/oapp/overview](https://docs.layerzero.network/v2/developers/solana/oapp/overview)
+* **OApp Example Code**: [https://github.com/LayerZero-Labs/devtools/tree/main/examples/oapp-solana](https://github.com/LayerZero-Labs/devtools/tree/main/examples/oapp-solana)
+* **LayerZero V2 Full Docs**: [https://docs.layerzero.network/v2](https://docs.layerzero.network/v2)
+* **LayerZero Scan Explorer**: [https://layerzeroscan.com/](https://layerzeroscan.com/)
+
+## 📐 System Architecture (Simplified)
+
+```
++-------------+     LayerZero Msg      +--------------+
+| EVM Wallet  |  ------------------->  | LayerZero Relayer |
++-------------+                        +--------------+
+                                                 |
+                                                 v
+                                       +----------------+
+                                       | Solana OApp PDA |
+                                       +----------------+
+```
+
+## 📊 Data Structure (Solana PDA)
+
+```rust
+pub struct IdentityAccount {
+    pub authority: Pubkey,                 // Solana wallet owner
+    pub linked_addresses: Vec<String>,     // List of EVM addresses
+}
+```
+
+## 📩 LayerZero Message Format Example
+
+This is the JSON message structure sent from EVM frontend to Solana LayerZero OApp:
+
+```json
+{
+  "evmAddress": "0xYashEVM",
+  "solanaAddress": "YashSol",
+  "timestamp": "2025-06-24T18:30:00Z"
+}
+```
+
+## 🔧 Solana Program (Anchor)
+
+* Accepts LayerZero message via custom instruction
+* Verifies it’s from a trusted source contract via LayerZero validation
+* Updates or creates a PDA at `identity/<solana_pubkey>`
+* Appends new EVM address to `linked_addresses` array
+* Exposes a public getter function to retrieve linked EVM addresses by Solana address
+
+## 🌐 Frontend Workflow (Detailed)
+
+### Identity Linker UI:
+
+1. User connects EVM wallet
+2. User connects Solana wallet
+3. Signs message with EVM wallet for proof of ownership
+4. Sends LayerZero message from EVM chain to Solana OApp program
+5. Solana program stores linked address in PDA
+6. Frontend fetches and displays linked wallets from PDA
+
+### DAO Verification UI:
+
+1. DAO frontend takes Solana wallet address input
+2. Queries PDA to fetch linked EVM addresses
+3. Uses JSON-RPC call (e.g., `eth_getBalance` or `balanceOf`) to check token balance or NFT ownership
+4. Displays eligibility status based on external chain asset ownership
+
+## 📌 Example Scenario for AI Coders:
+
+**User Yash** owns:
+
+* **Solana wallet:** YashSol
+* **EVM wallet:** 0xYashEVM with 120 DAO tokens
+
+**Yash visits your frontend:**
+
+* Links both wallets via LayerZero
+* Solana OApp creates a PDA:
+  `identity/YashSol: { linked_addresses: ["0xYashEVM"] }`
+
+**A DAO frontend later queries:**
+
+* Solana PDA: finds `0xYashEVM`
+* EVM JSON-RPC: finds 120 DAO tokens in `0xYashEVM`
+* Grants voting rights accordingly
+
+## 📊 Visual Diagram
+
+```
+[ EVM Wallet 0xYashEVM ]
+        |
+        | LayerZero Msg
+        v
+[ LayerZero Relayer ]
+        |
+        v
+[ Solana OApp (Anchor PDA: identity/YashSol) ]
+        |
+        | getLinkedAddresses()
+        v
+[ DAO Frontend ]
+        |
+        | JSON-RPC balanceOf("0xYashEVM")
+        v
+ Eligibility ✅
+```
+
+## 📹 Hackathon Demo Plan
+
+* Deploy Solana program to Devnet
+* Integrate with LayerZero Solana OApp standard
+* Build React frontend with two tabs:
+
+  * Identity Linker tab for linking wallets and viewing PDA data
+  * Mock DAO frontend tab for verifying EVM balance against linked addresses
+* Record video demo of linking and verifying process
+* Show LayerZeroScan transaction hashes as proof
+
+## ✅ Submission Checklist
+
+* [ ] Solana LayerZero V2 program deployed and working
+* [ ] Frontend for linking wallets and viewing PDAs
+* [ ] DAO verification tab with JSON-RPC calls
+* [ ] Public GitHub repo
+* [ ] Video walkthrough demo
+* [ ] LayerZeroScan proof hash
+
+**This version is tailored for AI coders, providing clear code structure, examples, architecture, data formats, and system flow.**
