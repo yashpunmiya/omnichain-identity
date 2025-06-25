@@ -26,22 +26,28 @@ contract OmnichainIdentityLinker is NonblockingLzApp, Ownable {
 
     /**
      * @dev Link the sender's EVM address to a Solana address
-     * @param _solanaAddress Solana address in bytes
+     * @param _solanaAddress Solana address as string
      * @param _dstAddress The destination address on Solana
      */
-    function linkAddress(bytes memory _solanaAddress, bytes32 _dstAddress) external payable {
-        // Construct the payload
-        bytes memory payload = abi.encode(
-            msg.sender,        // EVM address
-            _solanaAddress,    // Solana address
-            block.timestamp    // Timestamp
-        );
+    function linkAddress(string memory _solanaAddress, bytes32 _dstAddress) external payable {
+        // Format the message as CSV string for easy parsing on Solana
+        // Format: "evmAddress,solanaAddress,timestamp"
+        string memory evmAddressStr = addressToString(msg.sender);
+        string memory timestampStr = uint256ToString(block.timestamp);
+        string memory message = string(abi.encodePacked(
+            evmAddressStr, ",", 
+            _solanaAddress, ",", 
+            timestampStr
+        ));
+        
+        // Convert string to bytes for sending
+        bytes memory payload = bytes(message);
 
         // Store the linked address in history
-        linkedSolanaAddresses[msg.sender].push(_solanaAddress);
+        linkedSolanaAddresses[msg.sender].push(bytes(_solanaAddress));
 
         // Emit event
-        emit IdentityLinked(msg.sender, _solanaAddress, block.timestamp);
+        emit IdentityLinked(msg.sender, bytes(_solanaAddress), block.timestamp);
 
         // Send message to Solana via LayerZero
         _lzSend(
@@ -53,14 +59,79 @@ contract OmnichainIdentityLinker is NonblockingLzApp, Ownable {
             msg.value           // Native fee amount
         );
     }
+    
+    /**
+     * @dev Convert an address to a string
+     * @param _addr The address to convert
+     * @return String representation of the address
+     */
+    function addressToString(address _addr) internal pure returns (string memory) {
+        bytes32 value = bytes32(uint256(uint160(_addr)));
+        bytes memory alphabet = "0123456789abcdef";
+        
+        bytes memory str = new bytes(42);
+        str[0] = "0";
+        str[1] = "x";
+        
+        for (uint256 i = 0; i < 20; i++) {
+            str[2 + i * 2] = alphabet[uint8(value[i + 12] >> 4)];
+            str[3 + i * 2] = alphabet[uint8(value[i + 12] & 0x0f)];
+        }
+        
+        return string(str);
+    }
+    
+    /**
+     * @dev Convert a uint256 to a string
+     * @param _value The uint256 to convert
+     * @return String representation of the uint256
+     */
+    function uint256ToString(uint256 _value) internal pure returns (string memory) {
+        if (_value == 0) {
+            return "0";
+        }
+        
+        uint256 temp = _value;
+        uint256 digits;
+        
+        while (temp != 0) {
+            digits++;
+            temp /= 10;
+        }
+        
+        bytes memory buffer = new bytes(digits);
+        while (_value != 0) {
+            digits -= 1;
+            buffer[digits] = bytes1(uint8(48 + uint256(_value % 10)));
+            _value /= 10;
+        }
+        
+        return string(buffer);
+    }
 
     /**
      * @dev Get linked Solana addresses for an EVM address
      * @param _evmAddress The EVM address to check
-     * @return Array of linked Solana addresses
+     * @return Array of linked Solana addresses as bytes
      */
     function getLinkedAddresses(address _evmAddress) external view returns (bytes[] memory) {
         return linkedSolanaAddresses[_evmAddress];
+    }
+    
+    /**
+     * @dev Get linked Solana addresses for an EVM address as strings
+     * @param _evmAddress The EVM address to check
+     * @return Array of linked Solana addresses as strings
+     */
+    function getLinkedAddressesAsStrings(address _evmAddress) external view returns (string[] memory) {
+        bytes[] memory bytesAddresses = linkedSolanaAddresses[_evmAddress];
+        string[] memory strAddresses = new string[](bytesAddresses.length);
+        
+        for (uint i = 0; i < bytesAddresses.length; i++) {
+            strAddresses[i] = string(bytesAddresses[i]);
+        }
+        
+        return strAddresses;
     }
 
     /**
