@@ -1,4 +1,3 @@
-use crate::*;
 use anchor_lang::prelude::*;
 
 // Account state for storing linked identities

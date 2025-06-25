@@ -6,6 +6,7 @@ mod identity_msg_codec;
 
 use anchor_lang::prelude::*;
 use instructions::*;
+use errors::*;
 use oapp::{endpoint::MessagingFee, endpoint_cpi::LzAccount, LzReceiveParams};
 use solana_helper::program_id_from_env;
 use state::*;
@@ -77,18 +78,18 @@ pub mod my_oapp {
     
     // handler to initialize an identity account for a Solana wallet
     pub fn init_identity(
-        ctx: Context<InitIdentity>,
+        mut ctx: Context<InitIdentity>, 
         params: InitIdentityParams,
     ) -> Result<()> {
-        InitIdentity::apply(&ctx, &params)
+        InitIdentity::apply(&mut ctx, &params)
     }
     
     // handler to manually add a linked EVM address to the Solana wallet
     pub fn add_linked_address(
-        ctx: Context<AddLinkedAddress>,
+        mut ctx: Context<AddLinkedAddress>,
         params: AddLinkedAddressParams,
     ) -> Result<()> {
-        AddLinkedAddress::apply(&ctx, &params)
+        AddLinkedAddress::apply(&mut ctx, &params)
     }
     
     // handler to check if an EVM address is linked to a specific Solana wallet

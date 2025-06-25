@@ -1,5 +1,6 @@
 use anchor_lang::prelude::*;
 use std::str;
+use crate::errors::MyOAppError;
 
 // Identity message structure
 #[derive(Debug, Clone, AnchorSerialize, AnchorDeserialize)]
@@ -28,13 +29,13 @@ pub fn decode_identity_message(message: &[u8]) -> Result<IdentityMessage> {
     // Try to decode as JSON first (simplest approach)
     let message_str = match str::from_utf8(message) {
         Ok(s) => s,
-        Err(_) => return Err(error!(ErrorCode::InvalidMessageFormat))
+        Err(_) => return Err(error!(MyOAppError::InvalidMessageFormat))
     };
 
     // Split by comma for simple parsing (CSV-like format)
     let parts: Vec<&str> = message_str.split(",").collect();
     if parts.len() < 3 {
-        return Err(error!(ErrorCode::InvalidMessageFormat));
+        return Err(error!(MyOAppError::InvalidMessageFormat));
     }
 
     // Extract parts
@@ -44,13 +45,13 @@ pub fn decode_identity_message(message: &[u8]) -> Result<IdentityMessage> {
     // Validate EVM address format
     if !is_valid_evm_address(&evm_address) {
         msg!("Invalid EVM address format: {}", evm_address);
-        return Err(error!(ErrorCode::InvalidAddress));
+        return Err(error!(MyOAppError::InvalidAddress));
     }
     
     // Parse timestamp
     let timestamp = match parts[2].trim().parse::<i64>() {
         Ok(t) => t,
-        Err(_) => return Err(error!(ErrorCode::InvalidMessageFormat))
+        Err(_) => return Err(error!(MyOAppError::InvalidMessageFormat))
     };
 
     Ok(IdentityMessage {

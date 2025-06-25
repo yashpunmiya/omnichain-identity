@@ -16,19 +16,19 @@ pub struct AddLinkedAddress<'info> {
         mut,
         seeds = [IDENTITY_SEED, authority.key().as_ref()],
         bump = identity_account.bump,
-        constraint = identity_account.authority == authority.key() @ ErrorCode::InvalidAddress
+        constraint = identity_account.authority == authority.key() @ MyOAppError::InvalidAddress
     )]
     pub identity_account: Account<'info, IdentityAccount>,
 }
 
 impl AddLinkedAddress<'_> {
-    pub fn apply(ctx: &Context<AddLinkedAddress>, params: &AddLinkedAddressParams) -> Result<()> {
+    pub fn apply(ctx: &mut Context<AddLinkedAddress>, params: &AddLinkedAddressParams) -> Result<()> {
         let identity_account = &mut ctx.accounts.identity_account;
         
         // Validate EVM address format
         if !identity_msg_codec::is_valid_evm_address(&params.evm_address) {
             msg!("Invalid EVM address format");
-            return Err(error!(ErrorCode::InvalidAddress));
+            return Err(error!(MyOAppError::InvalidAddress));
         }
         
         // Check if this address is already linked
@@ -40,7 +40,7 @@ impl AddLinkedAddress<'_> {
         // Check if we're exceeding the maximum number of linked addresses
         if identity_account.linked_addresses.len() >= IdentityAccount::MAX_ADDRESSES {
             msg!("Maximum number of linked addresses reached");
-            return Err(error!(ErrorCode::InvalidPayload));
+            return Err(error!(MyOAppError::InvalidPayload));
         }
         
         // Add the new EVM address to the list

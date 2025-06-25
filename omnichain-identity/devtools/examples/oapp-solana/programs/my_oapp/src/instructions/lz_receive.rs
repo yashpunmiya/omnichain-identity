@@ -86,19 +86,19 @@ impl LzReceive<'_> {
 }
 
 // Process an identity linking message and try to update the identity PDA if it exists
-fn process_identity_message(ctx: &Context<LzReceive>, identity_msg: &identity_msg_codec::IdentityMessage) -> Result<()> {
+fn process_identity_message(_ctx: &Context<LzReceive>, identity_msg: &identity_msg_codec::IdentityMessage) -> Result<()> {
     // Validate the EVM address format
     if !identity_msg_codec::is_valid_evm_address(&identity_msg.evm_address) {
         msg!("Invalid EVM address format");
-        return Err(error!(ErrorCode::InvalidAddress));
+        return Err(error!(MyOAppError::InvalidAddress));
     }
 
     // Try to parse the Solana address
-    let solana_pubkey = match Pubkey::try_from_str(&identity_msg.solana_address) {
+    let solana_pubkey = match identity_msg.solana_address.parse::<Pubkey>() {
         Ok(pubkey) => pubkey,
         Err(_) => {
             msg!("Invalid Solana address format");
-            return Err(error!(ErrorCode::InvalidAddress));
+            return Err(error!(MyOAppError::InvalidAddress));
         }
     };
     
