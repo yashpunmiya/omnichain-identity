@@ -1,23 +1,27 @@
 import { useState } from 'react';
-import { Connection, clusterApiUrl, PublicKey } from '@solana/web3.js';
-import { getLinkedAddresses } from '../utils/solana';
-import { checkEvmBalance } from '../utils/evm';
+import { getLinkedAddresses, checkEvmBalance } from '../utils/evm';
 
 function DAOVerifier() {
-  const [solanaAddress, setSolanaAddress] = useState('');
+  const [evmAddress, setEvmAddress] = useState('');
   const [isVerifying, setIsVerifying] = useState(false);
   const [verificationResult, setVerificationResult] = useState(null);
   const [error, setError] = useState('');
 
   const handleAddressChange = (e) => {
-    setSolanaAddress(e.target.value);
+    setEvmAddress(e.target.value);
   };
 
   const handleVerify = async (e) => {
     e.preventDefault();
     
-    if (!solanaAddress) {
-      setError('Please enter a Solana address');
+    if (!evmAddress) {
+      setError('Please enter an EVM address');
+      return;
+    }
+
+    // Basic EVM address validation
+    if (!/^0x[a-fA-F0-9]{40}$/.test(evmAddress)) {
+      setError('Please enter a valid EVM address');
       return;
     }
 
@@ -26,45 +30,19 @@ function DAOVerifier() {
     setVerificationResult(null);
 
     try {
-      // Validate Solana address
-      const pubkey = new PublicKey(solanaAddress);
-      const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
+      // Get linked Solana addresses from EVM contract
+      const linkedAddresses = await getLinkedAddresses(evmAddress);
       
-      // Get linked EVM addresses
-      const linkedAddresses = await getLinkedAddresses(connection, pubkey);
+      // Check EVM balance (demo tokens based on ETH balance)
+      const balance = await checkEvmBalance(evmAddress);
       
-      if (linkedAddresses.length === 0) {
-        setVerificationResult({
-          hasLinkedAddresses: false,
-          linkedAddresses: [],
-          evmBalances: {}
-        });
-        return;
-      }
-      
-      // Check EVM balances for all linked addresses
-      const balancePromises = linkedAddresses.map(async (address) => {
-        const balance = await checkEvmBalance(address);
-        return { address, balance };
-      });
-      
-      const balanceResults = await Promise.all(balancePromises);
-      
-      // Format results
-      const evmBalances = {};
-      balanceResults.forEach((result) => {
-        evmBalances[result.address] = result.balance;
-      });
-      
-      // Determine if any address meets DAO criteria (e.g., > 10 tokens)
-      const meetsDAOCriteria = balanceResults.some((result) => 
-        parseFloat(result.balance) >= 10
-      );
+      // Determine if address meets DAO criteria (e.g., > 10 tokens)
+      const meetsDAOCriteria = parseFloat(balance) >= 10;
       
       setVerificationResult({
-        hasLinkedAddresses: true,
+        hasLinkedAddresses: linkedAddresses.length > 0,
         linkedAddresses,
-        evmBalances,
+        evmBalance: balance,
         meetsDAOCriteria
       });
       
@@ -79,14 +57,14 @@ function DAOVerifier() {
   return (
     <div className="dao-verifier card">
       <h2>DAO Verification</h2>
-      <p>Enter a Solana address to verify linked EVM addresses and DAO token balances</p>
+      <p>Enter an EVM address to verify linked Solana addresses and DAO token balances</p>
       
       <form onSubmit={handleVerify} className="verify-form">
         <input
           type="text"
-          value={solanaAddress}
+          value={evmAddress}
           onChange={handleAddressChange}
-          placeholder="Enter Solana address"
+          placeholder="Enter EVM address (0x...)"
           className="address-input"
         />
         <button type="submit" disabled={isVerifying}>
@@ -100,36 +78,39 @@ function DAOVerifier() {
         <div className="verification-result">
           <h3>Verification Results</h3>
           
+          <div className="evm-info">
+            <h4>EVM Address Info:</h4>
+            <p><strong>Address:</strong> {evmAddress}</p>
+            <p><strong>Demo Token Balance:</strong> {verificationResult.evmBalance} tokens</p>
+          </div>
+          
           {!verificationResult.hasLinkedAddresses ? (
-            <p>No linked EVM addresses found for this Solana address.</p>
+            <p>No linked Solana addresses found for this EVM address.</p>
           ) : (
             <>
-              <h4>Linked EVM Addresses:</h4>
+              <h4>Linked Solana Addresses:</h4>
               <ul className="linked-addresses-list">
                 {verificationResult.linkedAddresses.map((address, index) => (
                   <li key={index} className="linked-address-item">
                     <span>{address}</span>
-                    <span className="balance">
-                      Balance: {verificationResult.evmBalances[address] || '0'} DAO Tokens
-                    </span>
                   </li>
                 ))}
               </ul>
-              
-              <div className="dao-eligibility">
-                <h4>DAO Voting Eligibility:</h4>
-                {verificationResult.meetsDAOCriteria ? (
-                  <div className="eligibility-badge eligible">
-                    ✅ Eligible - Has sufficient DAO tokens
-                  </div>
-                ) : (
-                  <div className="eligibility-badge not-eligible">
-                    ❌ Not Eligible - Insufficient DAO tokens
-                  </div>
-                )}
-              </div>
             </>
           )}
+          
+          <div className="dao-eligibility">
+            <h4>DAO Voting Eligibility:</h4>
+            {verificationResult.meetsDAOCriteria ? (
+              <div className="eligibility-badge eligible">
+                ✅ Eligible - Has sufficient DAO tokens ({verificationResult.evmBalance} ≥ 10)
+              </div>
+            ) : (
+              <div className="eligibility-badge not-eligible">
+                ❌ Not Eligible - Insufficient DAO tokens ({verificationResult.evmBalance} &lt; 10)
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>

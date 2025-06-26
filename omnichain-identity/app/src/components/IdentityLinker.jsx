@@ -2,13 +2,12 @@ import { useState, useEffect } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useAccount, useSignMessage } from 'wagmi';
 import { Connection, clusterApiUrl, PublicKey } from '@solana/web3.js';
-import { sendLayerZeroMessage } from '../utils/evm';
-import { getLinkedAddresses } from '../utils/solana';
+import { sendLayerZeroMessage, getLinkedAddresses } from '../utils/evm';
 
 function IdentityLinker() {
   const [linkedAddresses, setLinkedAddresses] = useState([]);
   const [isLinking, setIsLinking] = useState(false);
-  const [txHash, setTxHash] = useState('');
+  const [txResult, setTxResult] = useState(null);
   const [error, setError] = useState('');
 
   // Solana connection
@@ -22,19 +21,20 @@ function IdentityLinker() {
 
   // Check for linked addresses when wallets are connected
   useEffect(() => {
-    if (solanaPublicKey) {
+    if (evmAddress) {
       fetchLinkedAddresses();
     }
-  }, [solanaPublicKey]);
+  }, [evmAddress]);
 
-  // Fetch linked addresses from Solana program
+  // Fetch linked addresses from EVM contract
   const fetchLinkedAddresses = async () => {
-    if (!solanaPublicKey) return;
+    if (!evmAddress) return;
     
     try {
-      const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
-      const addresses = await getLinkedAddresses(connection, solanaPublicKey);
+      // Get linked addresses from the EVM contract
+      const addresses = await getLinkedAddresses(evmAddress);
       setLinkedAddresses(addresses);
+      console.log(`✅ Found ${addresses.length} linked addresses for ${evmAddress}`);
     } catch (err) {
       console.error('Error fetching linked addresses:', err);
       setLinkedAddresses([]);
@@ -50,6 +50,7 @@ function IdentityLinker() {
 
     setIsLinking(true);
     setError('');
+    setTxResult(null);
 
     try {
       // Sign message with EVM wallet for proof of ownership
@@ -64,12 +65,14 @@ function IdentityLinker() {
         signature
       };
 
-      // Send message through LayerZero
-      const hash = await sendLayerZeroMessage(payload);
-      setTxHash(hash);
+      // Send message through LayerZero - now returns full transaction details
+      const result = await sendLayerZeroMessage(payload);
+      setTxResult(result);
       
-      // Refresh linked addresses after a delay to allow for propagation
-      setTimeout(fetchLinkedAddresses, 10000);
+      console.log('✅ Cross-chain message sent successfully:', result);
+      
+      // Refresh linked addresses after a delay to allow for cross-chain propagation
+      setTimeout(fetchLinkedAddresses, 15000);
     } catch (err) {
       console.error('Error linking wallets:', err);
       setError(`Error linking wallets: ${err.message}`);
@@ -97,35 +100,37 @@ function IdentityLinker() {
             {error && (
               <div className="error-container">
                 <p className="error">{error}</p>
-                {error.includes("LayerZero V2 Configuration Required") && (
-                  <div className="demo-status">
-                    <h4>🎉 Demo Status: Application Working Perfectly!</h4>
-                    <ul className="status-list">
-                      <li>✅ Frontend: Connected and functional</li>
-                      <li>✅ Smart Contract: Deployed on Sepolia (0xC69164AC7A5d53E676E4E2f9EFD5BE052F49Dc13)</li>
-                      <li>✅ Solana Program: Deployed on Devnet (DDyBRUnarV5xAdTn3XmjbhEGuiinCBRLT1tGkc33f5Fz)</li>
-                      <li>✅ LayerZero Integration: Peer configuration complete</li>
-                      <li>✅ Cross-chain Architecture: Ready for messaging</li>
-                      <li>⚙️ DVN Configuration: Minor setup remaining (5%)</li>
-                    </ul>
-                    <p className="demo-note">
-                      This demonstrates a complete omnichain application with LayerZero V2!
-                    </p>
-                  </div>
-                )}
               </div>
             )}
             
-            {txHash && (
-              <div className="transaction-info">
-                <p>Transaction sent! Check status on LayerZeroScan:</p>
-                <a 
-                  href={`https://layerzeroscan.com/tx/${txHash}`} 
-                  target="_blank" 
-                  rel="noreferrer"
-                >
-                  {txHash.substring(0, 10)}...{txHash.substring(txHash.length - 6)}
-                </a>
+            {txResult && (
+              <div className="transaction-info success">
+                <h4>🎉 Cross-chain Transaction Successful!</h4>
+                <div className="tx-details">
+                  <p><strong>Transaction Hash:</strong> 
+                    <a 
+                      href={`https://sepolia.etherscan.io/tx/${txResult.hash}`} 
+                      target="_blank" 
+                      rel="noreferrer"
+                      className="tx-link"
+                    >
+                      {txResult.hash.substring(0, 10)}...{txResult.hash.substring(txResult.hash.length - 6)}
+                    </a>
+                  </p>
+                  <p><strong>LayerZero Fee:</strong> {txResult.fee} ETH</p>
+                  <p><strong>Gas Used:</strong> {txResult.gasUsed}</p>
+                  <p><strong>Block:</strong> {txResult.blockNumber}</p>
+                  <div className="layerzero-scan">
+                    <a 
+                      href={txResult.layerZeroScan} 
+                      target="_blank" 
+                      rel="noreferrer"
+                      className="layerzero-link"
+                    >
+                      🔍 Track on LayerZeroScan
+                    </a>
+                  </div>
+                </div>
               </div>
             )}
           </div>
