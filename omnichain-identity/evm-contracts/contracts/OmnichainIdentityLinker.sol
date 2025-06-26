@@ -1,17 +1,16 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.17;
+pragma solidity ^0.8.20;
 
-import "@layerzerolabs/lz-evm-v1-0.7/contracts/lzApp/NonblockingLzApp.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "@layerzerolabs/oapp-evm/contracts/oapp/OApp.sol";
 
 /**
  * @title OmnichainIdentityLinker
- * @dev Contract for linking EVM addresses to Solana addresses via LayerZero
+ * @dev Contract for linking EVM addresses to Solana addresses via LayerZero V2
  * This contract sends messages from EVM chains to a Solana OApp
  */
-contract OmnichainIdentityLinker is NonblockingLzApp, Ownable {
-    // Solana chain ID in LayerZero
-    uint16 public constant SOLANA_CHAIN_ID = 168; // Solana testnet chain ID in LZ V2
+contract OmnichainIdentityLinker is OApp {
+    // Solana chain ID in LayerZero V2
+    uint32 public constant SOLANA_CHAIN_ID = 30168; // Solana testnet chain ID in LZ V2
 
     // Gas limit for cross-chain calls
     uint256 public gasLimit = 200000;
@@ -22,14 +21,13 @@ contract OmnichainIdentityLinker is NonblockingLzApp, Ownable {
     // Event emitted when a link is created
     event IdentityLinked(address evmAddress, bytes solanaAddress, uint256 timestamp);
 
-    constructor(address _lzEndpoint) NonblockingLzApp(_lzEndpoint) Ownable(msg.sender) {}
+    constructor(address _lzEndpoint, address _delegate) OApp(_lzEndpoint, _delegate) {}
 
     /**
      * @dev Link the sender's EVM address to a Solana address
      * @param _solanaAddress Solana address as string
-     * @param _dstAddress The destination address on Solana
      */
-    function linkAddress(string memory _solanaAddress, bytes32 _dstAddress) external payable {
+    function linkAddress(string memory _solanaAddress) external payable {
         // Format the message as CSV string for easy parsing on Solana
         // Format: "evmAddress,solanaAddress,timestamp"
         string memory evmAddressStr = addressToString(msg.sender);
@@ -49,14 +47,19 @@ contract OmnichainIdentityLinker is NonblockingLzApp, Ownable {
         // Emit event
         emit IdentityLinked(msg.sender, bytes(_solanaAddress), block.timestamp);
 
-        // Send message to Solana via LayerZero
+        // Prepare messaging parameters for LayerZero V2
+        bytes memory options = bytes(""); // Default options
+        
+        // Send message to Solana via LayerZero V2
+        MessagingFee memory fee = _quote(SOLANA_CHAIN_ID, payload, options, false);
+        require(msg.value >= fee.nativeFee, "Insufficient fee");
+        
         _lzSend(
-            SOLANA_CHAIN_ID,    // Destination chain ID (Solana)
-            payload,            // Payload
-            payable(msg.sender),// Refund address
-            address(0x0),       // zroPaymentAddress
-            bytes(""),          // adapterParams
-            msg.value           // Native fee amount
+            SOLANA_CHAIN_ID,     // Destination chain ID (Solana)
+            payload,             // Payload
+            options,             // Options
+            MessagingFee(msg.value, 0), // Fee
+            payable(msg.sender)  // Refund address
         );
     }
     
@@ -135,16 +138,39 @@ contract OmnichainIdentityLinker is NonblockingLzApp, Ownable {
     }
 
     /**
-     * @dev Override the _nonblockingLzReceive function to handle incoming messages (if needed)
+     * @dev Quote the fee for sending a message to Solana
+     * @param _solanaAddress The Solana address to link
+     * @return fee The estimated messaging fee
+     */
+    function quoteLinkFee(string memory _solanaAddress) external view returns (MessagingFee memory fee) {
+        // Format the message as CSV string for fee estimation
+        string memory evmAddressStr = addressToString(msg.sender);
+        string memory timestampStr = uint256ToString(block.timestamp);
+        string memory message = string(abi.encodePacked(
+            evmAddressStr, ",", 
+            _solanaAddress, ",", 
+            timestampStr
+        ));
+        
+        bytes memory payload = bytes(message);
+        bytes memory options = bytes(""); // Default options
+        
+        return _quote(SOLANA_CHAIN_ID, payload, options, false);
+    }
+
+    /**
+     * @dev Override the _lzReceive function to handle incoming messages (if needed)
      * This would be used if you want to receive messages from Solana back to EVM
      */
-    function _nonblockingLzReceive(
-        uint16 _srcChainId,
-        bytes memory _srcAddress,
-        uint64 _nonce,
-        bytes memory _payload
+    function _lzReceive(
+        Origin calldata _origin,
+        bytes32 _guid,
+        bytes calldata _payload,
+        address _executor,
+        bytes calldata _extraData
     ) internal override {
         // Add handling for received messages from Solana if needed
+        // For now, this is a placeholder
     }
 
     /**

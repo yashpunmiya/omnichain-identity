@@ -8,7 +8,7 @@ const BSC_RPC_URL = process.env.BSC_RPC_URL || "https://data-seed-prebsc-1-s1.bi
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
-  solidity: "0.8.18",
+  solidity: "0.8.20",
   networks: {
     ethereum: {
       url: ETHEREUM_RPC_URL,

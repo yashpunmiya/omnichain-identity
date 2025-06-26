@@ -5,3 +5,14 @@ pubkey: 9dvHkfm4iUc3sCQ9B7KzycqomNtD9iCVjfpMgir3Ej4j
 Save this seed phrase and your BIP39 passphrase to recover your new keypair:
 pink bar taste gasp dove stone narrow run sadness other claw glance
 ===================================================================
+
+solana address -k target/deploy/my_oapp-keypair.json
+DDyBRUnarV5xAdTn3XmjbhEGuiinCBRLT1tGkc33f5Fz
+
+Deploying cluster: https://api.devnet.solana.com
+Upgrade authority: /home/yyash/.config/solana/id.json
+Deploying program "my_oapp"...
+Program path: /mnt/c/Users/yyash/Coding/omnichain identity/omnichain-identity/devtools/examples/oapp-solana/target/deploy/my_oapp.so...
+Program Id: DDyBRUnarV5xAdTn3XmjbhEGuiinCBRLT1tGkc33f5Fz
+
+Deploy success
