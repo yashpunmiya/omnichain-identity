@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "C:\\Users\\yyash\\Coding\\omnichain identity\\omnichain-identity\\evm-contracts\\contracts\\OmnichainIdentityLinker.sol": {
-      "lastModificationDate": 1750954554477,
-      "contentHash": "7fc2975816975703314aeb6962762b88",
+      "lastModificationDate": 1750960653903,
+      "contentHash": "230b578d39ba1cbf8aba15dc5ce9ee39",
       "sourceName": "contracts/OmnichainIdentityLinker.sol",
       "solcConfig": {
         "version": "0.8.20",
@@ -30,7 +30,8 @@
         }
       },
       "imports": [
-        "@layerzerolabs/oapp-evm/contracts/oapp/OApp.sol"
+        "@layerzerolabs/oapp-evm/contracts/oapp/OApp.sol",
+        "@layerzerolabs/oapp-evm/contracts/oapp/libs/OptionsBuilder.sol"
       ],
       "versionPragmas": [
         "^0.8.20"
@@ -716,6 +717,269 @@
       ],
       "artifacts": [
         "IERC20Permit"
+      ]
+    },
+    "C:\\Users\\yyash\\Coding\\omnichain identity\\omnichain-identity\\evm-contracts\\node_modules\\@layerzerolabs\\oapp-evm\\contracts\\oapp\\libs\\OptionsBuilder.sol": {
+      "lastModificationDate": 1750955711261,
+      "contentHash": "95cf6ed40e90cf1a748bcd76d6f5c849",
+      "sourceName": "@layerzerolabs/oapp-evm/contracts/oapp/libs/OptionsBuilder.sol",
+      "solcConfig": {
+        "version": "0.8.20",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "solidity-bytes-utils/contracts/BytesLib.sol",
+        "@openzeppelin/contracts/utils/math/SafeCast.sol",
+        "@layerzerolabs/lz-evm-messagelib-v2/contracts/libs/ExecutorOptions.sol",
+        "@layerzerolabs/lz-evm-messagelib-v2/contracts/uln/libs/DVNOptions.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "OptionsBuilder"
+      ]
+    },
+    "C:\\Users\\yyash\\Coding\\omnichain identity\\omnichain-identity\\evm-contracts\\node_modules\\solidity-bytes-utils\\contracts\\BytesLib.sol": {
+      "lastModificationDate": 1750960599862,
+      "contentHash": "7d64acd21f214069ce975ef79fdeff64",
+      "sourceName": "solidity-bytes-utils/contracts/BytesLib.sol",
+      "solcConfig": {
+        "version": "0.8.20",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.8.0 <0.9.0"
+      ],
+      "artifacts": [
+        "BytesLib"
+      ]
+    },
+    "C:\\Users\\yyash\\Coding\\omnichain identity\\omnichain-identity\\evm-contracts\\node_modules\\@openzeppelin\\contracts\\utils\\math\\SafeCast.sol": {
+      "lastModificationDate": 1750955711216,
+      "contentHash": "67cf2dfe1d1c22b4ea7f242e8a17f431",
+      "sourceName": "@openzeppelin/contracts/utils/math/SafeCast.sol",
+      "solcConfig": {
+        "version": "0.8.20",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "SafeCast"
+      ]
+    },
+    "C:\\Users\\yyash\\Coding\\omnichain identity\\omnichain-identity\\evm-contracts\\node_modules\\@layerzerolabs\\lz-evm-messagelib-v2\\contracts\\libs\\ExecutorOptions.sol": {
+      "lastModificationDate": 1750960601611,
+      "contentHash": "3f6e7baf384cd5e0749c85e482baab64",
+      "sourceName": "@layerzerolabs/lz-evm-messagelib-v2/contracts/libs/ExecutorOptions.sol",
+      "solcConfig": {
+        "version": "0.8.20",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@layerzerolabs/lz-evm-protocol-v2/contracts/libs/CalldataBytesLib.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "ExecutorOptions"
+      ]
+    },
+    "C:\\Users\\yyash\\Coding\\omnichain identity\\omnichain-identity\\evm-contracts\\node_modules\\@layerzerolabs\\lz-evm-messagelib-v2\\contracts\\uln\\libs\\DVNOptions.sol": {
+      "lastModificationDate": 1750960601739,
+      "contentHash": "d2b1c66f564862f65b37230b44da37c0",
+      "sourceName": "@layerzerolabs/lz-evm-messagelib-v2/contracts/uln/libs/DVNOptions.sol",
+      "solcConfig": {
+        "version": "0.8.20",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "solidity-bytes-utils/contracts/BytesLib.sol",
+        "@layerzerolabs/lz-evm-protocol-v2/contracts/messagelib/libs/BitMaps.sol",
+        "@layerzerolabs/lz-evm-protocol-v2/contracts/libs/CalldataBytesLib.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "DVNOptions"
+      ]
+    },
+    "C:\\Users\\yyash\\Coding\\omnichain identity\\omnichain-identity\\evm-contracts\\node_modules\\@layerzerolabs\\lz-evm-protocol-v2\\contracts\\libs\\CalldataBytesLib.sol": {
+      "lastModificationDate": 1750955709468,
+      "contentHash": "673ca16094a43c577ed24243c20361aa",
+      "sourceName": "@layerzerolabs/lz-evm-protocol-v2/contracts/libs/CalldataBytesLib.sol",
+      "solcConfig": {
+        "version": "0.8.20",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "CalldataBytesLib"
+      ]
+    },
+    "C:\\Users\\yyash\\Coding\\omnichain identity\\omnichain-identity\\evm-contracts\\node_modules\\@layerzerolabs\\lz-evm-protocol-v2\\contracts\\messagelib\\libs\\BitMaps.sol": {
+      "lastModificationDate": 1750955709565,
+      "contentHash": "b2d6a04de0dde1607086d9872aac790e",
+      "sourceName": "@layerzerolabs/lz-evm-protocol-v2/contracts/messagelib/libs/BitMaps.sol",
+      "solcConfig": {
+        "version": "0.8.20",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "BitMaps"
       ]
     }
   }

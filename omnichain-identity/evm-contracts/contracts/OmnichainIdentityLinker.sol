@@ -2,6 +2,7 @@
 pragma solidity ^0.8.20;
 
 import "@layerzerolabs/oapp-evm/contracts/oapp/OApp.sol";
+import "@layerzerolabs/oapp-evm/contracts/oapp/libs/OptionsBuilder.sol";
 
 /**
  * @title OmnichainIdentityLinker
@@ -9,6 +10,7 @@ import "@layerzerolabs/oapp-evm/contracts/oapp/OApp.sol";
  * This contract sends messages from EVM chains to a Solana OApp
  */
 contract OmnichainIdentityLinker is OApp {
+    using OptionsBuilder for bytes;
     // Solana chain ID in LayerZero V2
     uint32 public constant SOLANA_CHAIN_ID = 40168; // Solana DEVNET chain ID in LZ V2 (CORRECTED)
 
@@ -48,7 +50,9 @@ contract OmnichainIdentityLinker is OApp {
         emit IdentityLinked(msg.sender, bytes(_solanaAddress), block.timestamp);
 
         // Prepare messaging parameters for LayerZero V2
-        bytes memory options = bytes(""); // Default options
+        // ✅ FIXED: Use proper LayerZero V2 OptionsBuilder
+        bytes memory options = OptionsBuilder.newOptions()
+            .addExecutorLzReceiveOption(uint128(gasLimit), 0);
         
         // Send message to Solana via LayerZero V2
         MessagingFee memory fee = _quote(SOLANA_CHAIN_ID, payload, options, false);
@@ -156,6 +160,31 @@ contract OmnichainIdentityLinker is OApp {
         bytes memory options = bytes(""); // Default options
         
         return _quote(SOLANA_CHAIN_ID, payload, options, false);
+    }
+
+    /**
+     * @dev Quote the fee for linking an address
+     * @param _solanaAddress Solana address as string
+     * @return Fee required for the cross-chain message
+     */
+    function quoteLinkAddress(string memory _solanaAddress) external view returns (uint256) {
+        // Format the same message as in linkAddress
+        string memory evmAddressStr = addressToString(msg.sender);
+        string memory timestampStr = uint256ToString(block.timestamp);
+        string memory message = string(abi.encodePacked(
+            evmAddressStr, ",", 
+            _solanaAddress, ",", 
+            timestampStr
+        ));
+        
+        bytes memory payload = bytes(message);
+        
+        // Use the same options as in linkAddress
+        bytes memory options = OptionsBuilder.newOptions()
+            .addExecutorLzReceiveOption(uint128(gasLimit), 0);
+        
+        MessagingFee memory fee = _quote(SOLANA_CHAIN_ID, payload, options, false);
+        return fee.nativeFee;
     }
 
     /**

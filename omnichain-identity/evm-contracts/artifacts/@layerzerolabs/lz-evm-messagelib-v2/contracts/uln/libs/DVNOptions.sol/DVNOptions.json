@@ -1,0 +1,27 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "DVNOptions",
+  "sourceName": "@layerzerolabs/lz-evm-messagelib-v2/contracts/uln/libs/DVNOptions.sol",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "DVN_InvalidDVNIdx",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "cursor",
+          "type": "uint256"
+        }
+      ],
+      "name": "DVN_InvalidDVNOptions",
+      "type": "error"
+    }
+  ],
+  "bytecode": "0x60566050600b82828239805160001a6073146043577f4e487b7100000000000000000000000000000000000000000000000000000000600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220b7f77522cbf9c5c507b3f8b6bafcdf1bc01a2687867250963bca8ce021f4ffcf64736f6c63430008140033",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220b7f77522cbf9c5c507b3f8b6bafcdf1bc01a2687867250963bca8ce021f4ffcf64736f6c63430008140033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}
