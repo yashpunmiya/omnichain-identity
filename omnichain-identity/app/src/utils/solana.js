@@ -1,7 +1,8 @@
 import { PublicKey, SystemProgram, Transaction } from '@solana/web3.js';
 import { Buffer } from 'buffer';
 import * as borsh from 'borsh';
-import { AnchorProvider, Program, BN } from '@project-serum/anchor';
+// Use the newer Coral XYZ Anchor package
+import { AnchorProvider, Program, BN } from '@coral-xyz/anchor';
 
 // Replace with your actual program ID after deployment
 export const IDENTITY_PROGRAM_ID = new PublicKey('41NCdrEvXhQ4mZgyJkmqYxL6A1uEmnraGj31UJ6PsXd3');

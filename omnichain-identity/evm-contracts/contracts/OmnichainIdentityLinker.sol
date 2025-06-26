@@ -10,7 +10,7 @@ import "@layerzerolabs/oapp-evm/contracts/oapp/OApp.sol";
  */
 contract OmnichainIdentityLinker is OApp {
     // Solana chain ID in LayerZero V2
-    uint32 public constant SOLANA_CHAIN_ID = 30168; // Solana testnet chain ID in LZ V2
+    uint32 public constant SOLANA_CHAIN_ID = 40168; // Solana DEVNET chain ID in LZ V2 (CORRECTED)
 
     // Gas limit for cross-chain calls
     uint256 public gasLimit = 200000;

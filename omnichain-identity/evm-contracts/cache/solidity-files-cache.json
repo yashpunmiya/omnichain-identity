@@ -1,45 +1,9 @@
 {
   "_format": "hh-sol-cache-2",
   "files": {
-    "C:\\Users\\yyash\\Coding\\omnichain identity\\omnichain-identity\\evm-contracts\\contracts\\MockLzEndpoint.sol": {
-      "lastModificationDate": 1750772117802,
-      "contentHash": "f9b3dd13b93127bc28a7ef2ec32cbd5b",
-      "sourceName": "contracts/MockLzEndpoint.sol",
-      "solcConfig": {
-        "version": "0.8.20",
-        "settings": {
-          "evmVersion": "paris",
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.17"
-      ],
-      "artifacts": [
-        "MockLzEndpoint"
-      ]
-    },
     "C:\\Users\\yyash\\Coding\\omnichain identity\\omnichain-identity\\evm-contracts\\contracts\\OmnichainIdentityLinker.sol": {
-      "lastModificationDate": 1750947103524,
-      "contentHash": "761f0c556eb700119baeed8ac2b82a93",
+      "lastModificationDate": 1750954554477,
+      "contentHash": "7fc2975816975703314aeb6962762b88",
       "sourceName": "contracts/OmnichainIdentityLinker.sol",
       "solcConfig": {
         "version": "0.8.20",

@@ -11,6 +11,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@layerzerolabs/metadata-tools": "^2.0.0",
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.0",
     "@nomicfoundation/hardhat-ethers": "^3.0.0",
     "@nomicfoundation/hardhat-network-helpers": "^1.0.0",
@@ -29,8 +30,10 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "@layerzerolabs/lz-definitions": "^3.0.106",
     "@layerzerolabs/lz-evm-protocol-v2": "^3.0.106",
     "@layerzerolabs/oapp-evm": "^0.3.2",
+    "@layerzerolabs/toolbox-hardhat": "^0.6.11",
     "@openzeppelin/contracts": "^4.9.3",
     "ethers": "^6.7.0"
   }
