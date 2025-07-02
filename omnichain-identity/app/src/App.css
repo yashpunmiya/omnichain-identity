@@ -1,20 +1,641 @@
-.app-container {
-  max-width: 800px;
-  margin: 0 auto;
+/* Modern App Layout - No Scroll, Full Screen */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  overflow: hidden;
+  background: #0f0f23;
+}
+
+.app {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 100%);
+}
+
+/* Sidebar Styles */
+.app__sidebar {
+  width: 400px;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow-y: auto;
+}
+
+.app__sidebar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, 
+    rgba(99, 102, 241, 0.05) 0%, 
+    rgba(139, 92, 246, 0.05) 25%,
+    rgba(59, 130, 246, 0.05) 50%,
+    rgba(99, 102, 241, 0.05) 75%,
+    rgba(139, 92, 246, 0.05) 100%);
+  pointer-events: none;
+}
+
+/* Brand Section */
+.app__brand {
   padding: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  z-index: 2;
+}
+
+.app__brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.app__logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  margin-bottom: 1rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.app__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.app__subtitle {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Navigation Styles */
+.app__nav {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.app__nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  background: transparent;
+  border: 1px solid transparent;
+}
+
+.app__nav-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.9);
+  border-color: rgba(255, 255, 255, 0.1);
+  transform: translateX(4px);
+}
+
+.app__nav-item--active {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+  color: #ffffff;
+  border-color: rgba(99, 102, 241, 0.3);
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.2);
+}
+
+.app__nav-item--active:hover {
+  transform: translateX(0);
+}
+
+/* Footer Styles */
+.app__footer {
+  margin-top: auto;
+  padding: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  z-index: 2;
+}
+
+.app__footer-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.app__footer-info svg {
+  color: #6366f1;
+}
+
+.app__footer-info p {
+  font-size: 0.75rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.app__footer-subtitle {
+  opacity: 0.7;
+}
+
+/* Main Content Area */
+.app__main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+.app__main::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 60%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.app__content {
+  flex: 1;
+  overflow-y: auto;
+  position: relative;
+  z-index: 2;
+}
+
+/* Wallet Connector Redesign */
+.wallet-connector {
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  z-index: 2;
+}
+
+.wallet-connector__title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 1.5rem 0;
   text-align: center;
 }
 
-header {
+.wallet-connector__grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.wallet-connector__section {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.25rem;
+  backdrop-filter: blur(10px);
+}
+
+.wallet-connector__header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.wallet-connector__chain-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+}
+
+.wallet-connector__chain-name {
+  font-weight: 600;
+  color: #ffffff;
+  font-size: 0.95rem;
+}
+
+.wallet-connector__address {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.625rem 0.875rem;
+  border-radius: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.wallet-connector__button {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.875rem;
+}
+
+.wallet-connector__button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.wallet-connector__button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.wallet-connector__button--disconnect {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+}
+
+.wallet-connector__button--disconnect:hover {
+  background: rgba(239, 68, 68, 0.3);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}
+
+/* Identity Linker Redesign */
+.identity-linker {
+  padding: 0;
+  background: transparent;
+  border: none;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.identity-linker__container {
+  padding: 3rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.identity-linker__hero {
+  max-width: 600px;
+  margin-bottom: 3rem;
+}
+
+.identity-linker__title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin: 0 0 1.5rem 0;
+  background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.1;
+}
+
+.identity-linker__subtitle {
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+  margin: 0 0 2rem 0;
+}
+
+.identity-linker__connect-prompt {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+}
+
+.identity-linker__connect-text {
+  font-size: 1.125rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+.identity-linker__action-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 2.5rem;
+  backdrop-filter: blur(20px);
+  max-width: 500px;
+  width: 100%;
+}
+
+.identity-linker__link-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 1.25rem 2rem;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
   margin-bottom: 2rem;
 }
 
-main {
-  margin-top: 2rem;
+.identity-linker__link-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
 }
 
-footer {
-  margin-top: 2rem;
+.identity-linker__link-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.identity-linker__spinner {
+  animation: spin 1s linear infinite;
+}
+
+/* Transaction Success Styles */
+.identity-linker__success {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.identity-linker__success-title {
+  color: #10b981;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.identity-linker__tx-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.identity-linker__tx-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.875rem;
+}
+
+.identity-linker__tx-link {
+  color: #6366f1;
+  text-decoration: none;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.identity-linker__tx-link:hover {
+  text-decoration: underline;
+}
+
+.identity-linker__lz-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #8b5cf6;
+  text-decoration: none;
+  font-weight: 500;
+  margin-top: 1rem;
+}
+
+.identity-linker__lz-link:hover {
+  text-decoration: underline;
+}
+
+/* Error Styles */
+.identity-linker__error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  color: #fca5a5;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Linked Addresses */
+.identity-linker__addresses {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.identity-linker__addresses-title {
+  color: #ffffff;
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+}
+
+.identity-linker__addresses-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.identity-linker__address-item {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 0.8rem;
-  opacity: 0.7;
+  color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.identity-linker__no-addresses {
+  color: rgba(255, 255, 255, 0.6);
+  font-style: italic;
+  text-align: center;
+  padding: 1rem;
+}
+
+/* DAO Verifier - Use existing styles but adjust container */
+.dao-verifier {
+  height: 100%;
+  padding: 0;
+  background: transparent;
+}
+
+.dao-verifier__container {
+  height: 100%;
+  max-width: none;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Solana Wallet Adapter Button Styling */
+.wallet-adapter-button {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 0.75rem 1rem !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  color: white !important;
+  transition: all 0.2s ease !important;
+  width: 100% !important;
+}
+
+.wallet-adapter-button:hover:not([disabled]) {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3) !important;
+}
+
+.wallet-adapter-button:disabled {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
+.wallet-adapter-dropdown {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
+}
+
+.wallet-adapter-dropdown-list {
+  background: transparent !important;
+}
+
+.wallet-adapter-dropdown-list-item {
+  background: transparent !important;
+  color: #374151 !important;
+  padding: 0.75rem 1rem !important;
+  border-radius: 8px !important;
+  margin: 0.25rem !important;
+}
+
+.wallet-adapter-dropdown-list-item:hover {
+  background: rgba(99, 102, 241, 0.1) !important;
+}
+
+/* Custom styles for wallet adapter in sidebar */
+.wallet-connector .wallet-adapter-button {
+  font-size: 0.8rem !important;
+  padding: 0.625rem 0.875rem !important;
+}
+
+.wallet-connector .wallet-adapter-button-trigger {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .app__sidebar {
+    width: 350px;
+  }
+  
+  .identity-linker__title {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .app {
+    flex-direction: column;
+  }
+  
+  .app__sidebar {
+    width: 100%;
+    height: auto;
+    max-height: 50vh;
+  }
+  
+  .app__main {
+    flex: 1;
+    min-height: 50vh;
+  }
+  
+  .identity-linker__container,
+  .dao-verifier__container {
+    padding: 2rem 1rem;
+  }
+  
+  .identity-linker__title {
+    font-size: 2rem;
+  }
+}
+
+/* Animations */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Scrollbar Styling */
+.app__sidebar::-webkit-scrollbar,
+.app__content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.app__sidebar::-webkit-scrollbar-track,
+.app__content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.app__sidebar::-webkit-scrollbar-thumb,
+.app__content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.app__sidebar::-webkit-scrollbar-thumb:hover,
+.app__content::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
 }

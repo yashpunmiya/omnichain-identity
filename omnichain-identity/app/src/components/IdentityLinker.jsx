@@ -82,75 +82,116 @@ function IdentityLinker() {
   };
 
   return (
-    <div className="identity-linker card">
-      <h2>Link Your Identities</h2>
-      
-      {(!solanaPublicKey || !evmAddress) ? (
-        <p>Please connect both your Solana and EVM wallets to link them.</p>
-      ) : (
-        <>
-          <div className="flex flex-col">
+    <div className="identity-linker">
+      <div className="identity-linker__container">
+        <div className="identity-linker__hero">
+          <h1 className="identity-linker__title">Link Your Cross-Chain Identity</h1>
+          <p className="identity-linker__subtitle">
+            Securely connect your Solana and EVM wallets using LayerZero's cross-chain infrastructure. 
+            Create a unified identity across multiple blockchains.
+          </p>
+        </div>
+
+        {(!solanaPublicKey || !evmAddress) ? (
+          <div className="identity-linker__connect-prompt">
+            <p className="identity-linker__connect-text">
+              Please connect both your Solana and EVM wallets to begin the linking process.
+            </p>
+          </div>
+        ) : (
+          <div className="identity-linker__action-card">
             <button 
               onClick={handleLinkWallets} 
               disabled={isLinking || !solanaPublicKey || !evmAddress}
+              className="identity-linker__link-button"
             >
-              {isLinking ? 'Linking...' : 'Link Wallets via LayerZero'}
+              {isLinking ? (
+                <>
+                  <svg className="identity-linker__spinner" width="20" height="20" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" opacity="0.25"/>
+                    <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" strokeWidth="4" fill="none" strokeLinecap="round"/>
+                  </svg>
+                  Linking via LayerZero...
+                </>
+              ) : (
+                <>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <path d="M13.828 10.172L15.656 8.344C16.781 7.219 16.781 5.375 15.656 4.25C14.531 3.125 12.688 3.125 11.563 4.25L9.735 6.078M10.172 13.828L8.344 15.656C7.219 16.781 7.219 18.625 8.344 19.75C9.469 20.875 11.313 20.875 12.438 19.75L14.266 17.922M14.828 9.172L9.172 14.828" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  Link Wallets via LayerZero
+                </>
+              )}
             </button>
             
             {error && (
-              <div className="error-container">
-                <p className="error">{error}</p>
+              <div className="identity-linker__error">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 9V13M12 17H12.01M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                {error}
               </div>
             )}
             
             {txResult && (
-              <div className="transaction-info success">
-                <h4>🎉 Cross-chain Transaction Successful!</h4>
-                <div className="tx-details">
-                  <p><strong>Transaction Hash:</strong> 
+              <div className="identity-linker__success">
+                <h4 className="identity-linker__success-title">
+                  🎉 Cross-chain Transaction Successful!
+                </h4>
+                <div className="identity-linker__tx-details">
+                  <div className="identity-linker__tx-row">
+                    <span>Transaction Hash:</span>
                     <a 
                       href={`https://sepolia.etherscan.io/tx/${txResult.hash}`} 
                       target="_blank" 
                       rel="noreferrer"
-                      className="tx-link"
+                      className="identity-linker__tx-link"
                     >
                       {txResult.hash.substring(0, 10)}...{txResult.hash.substring(txResult.hash.length - 6)}
                     </a>
-                  </p>
-                  <p><strong>LayerZero Fee:</strong> {txResult.fee} ETH</p>
-                  <p><strong>Gas Used:</strong> {txResult.gasUsed}</p>
-                  <p><strong>Block:</strong> {txResult.blockNumber}</p>
-                  <div className="layerzero-scan">
-                    <a 
-                      href={txResult.layerZeroScan} 
-                      target="_blank" 
-                      rel="noreferrer"
-                      className="layerzero-link"
-                    >
-                      🔍 Track on LayerZeroScan
-                    </a>
                   </div>
+                  <div className="identity-linker__tx-row">
+                    <span>LayerZero Fee:</span>
+                    <span>{txResult.fee} ETH</span>
+                  </div>
+                  <div className="identity-linker__tx-row">
+                    <span>Gas Used:</span>
+                    <span>{txResult.gasUsed}</span>
+                  </div>
+                  <div className="identity-linker__tx-row">
+                    <span>Block:</span>
+                    <span>{txResult.blockNumber}</span>
+                  </div>
+                  <a 
+                    href={txResult.layerZeroScan} 
+                    target="_blank" 
+                    rel="noreferrer"
+                    className="identity-linker__lz-link"
+                  >
+                    🔍 Track on LayerZeroScan
+                  </a>
                 </div>
               </div>
             )}
-          </div>
 
-          <div className="linked-addresses">
-            <h3>Your Linked Addresses</h3>
-            {linkedAddresses.length === 0 ? (
-              <p>No linked addresses found. Link your wallets above!</p>
-            ) : (
-              <ul>
-                {linkedAddresses.map((address, index) => (
-                  <li key={index} className="address-item">
-                    {address}
-                  </li>
-                ))}
-              </ul>
-            )}
+            <div className="identity-linker__addresses">
+              <h3 className="identity-linker__addresses-title">Your Linked Addresses</h3>
+              {linkedAddresses.length === 0 ? (
+                <p className="identity-linker__no-addresses">
+                  No linked addresses found. Link your wallets above!
+                </p>
+              ) : (
+                <ul className="identity-linker__addresses-list">
+                  {linkedAddresses.map((address, index) => (
+                    <li key={index} className="identity-linker__address-item">
+                      {address}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           </div>
-        </>
-      )}
+        )}
+      </div>
     </div>
   );
 }
