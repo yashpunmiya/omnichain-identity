@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg 
+  width="512"
+  height="512"
+  viewBox="0 0 512 512"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <rect width="512" height="512" rx="128" fill="url(#paint0_linear)" />
+  
+  <!-- Logo elements with appropriate scaling -->
+  <g transform="translate(72, 72) scale(0.72)">
+    <path 
+      d="M341.33 170.67L405.33 106.67C428.9 83.1 428.9 44.9 405.33 21.33C381.77 -2.23 343.57 -2.23 320 21.33L256 85.33M170.67 341.33L106.67 405.33C83.1 428.9 44.9 428.9 21.33 405.33C-2.23 381.77 -2.23 343.57 21.33 320L85.33 256" 
+      stroke="white" 
+      strokeWidth="42" 
+      strokeLinecap="round"
+    />
+    <path 
+      d="M213.33 213.33L298.67 298.67" 
+      stroke="white" 
+      strokeWidth="42" 
+      strokeLinecap="round" 
+    />
+    <circle 
+      cx="170.67" 
+      cy="170.67" 
+      r="64" 
+      fill="rgba(255,255,255,0.9)" 
+      stroke="white" 
+      strokeWidth="21"
+    />
+    <circle 
+      cx="341.33" 
+      cy="341.33" 
+      r="64" 
+      fill="rgba(255,255,255,0.9)" 
+      stroke="white" 
+      strokeWidth="21"
+    />
+  </g>
+
+  <!-- Gradient definition -->
+  <defs>
+    <linearGradient id="paint0_linear" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#3B82F6" />
+      <stop offset="1" stop-color="#7C3AED" />
+    </linearGradient>
+  </defs>
+</svg>

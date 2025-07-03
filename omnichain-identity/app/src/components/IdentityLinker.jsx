@@ -82,32 +82,32 @@ function IdentityLinker() {
   };
 
   return (
-    <div className="identity-linker">
-      <div className="identity-linker__container">
-        <div className="identity-linker__hero">
-          <h1 className="identity-linker__title">Link Your Cross-Chain Identity</h1>
-          <p className="identity-linker__subtitle">
+    <section className="identity-linker">
+      <div className="flex flex-col items-center justify-center h-full">
+        <header className="identity-hero">
+          <h1 className="identity-title">Link Your Cross-Chain Identity</h1>
+          <p className="identity-subtitle">
             Securely connect your Solana and EVM wallets using LayerZero's cross-chain infrastructure. 
             Create a unified identity across multiple blockchains.
           </p>
-        </div>
+        </header>
 
         {(!solanaPublicKey || !evmAddress) ? (
-          <div className="identity-linker__connect-prompt">
-            <p className="identity-linker__connect-text">
+          <div className="card p-6 identity-connect-prompt">
+            <p className="text-lg text-center">
               Please connect both your Solana and EVM wallets to begin the linking process.
             </p>
           </div>
         ) : (
-          <div className="identity-linker__action-card">
+          <div className="card card--elevated identity-action-card">
             <button 
               onClick={handleLinkWallets} 
               disabled={isLinking || !solanaPublicKey || !evmAddress}
-              className="identity-linker__link-button"
+              className="btn btn--lg identity-link-button"
             >
               {isLinking ? (
                 <>
-                  <svg className="identity-linker__spinner" width="20" height="20" viewBox="0 0 24 24">
+                  <svg className="spinner" width="20" height="20" viewBox="0 0 24 24">
                     <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" opacity="0.25"/>
                     <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" strokeWidth="4" fill="none" strokeLinecap="round"/>
                   </svg>
@@ -124,65 +124,67 @@ function IdentityLinker() {
             </button>
             
             {error && (
-              <div className="identity-linker__error">
+              <div className="alert alert--error mb-6">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                   <path d="M12 9V13M12 17H12.01M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                {error}
+                <span>{error}</span>
               </div>
             )}
             
             {txResult && (
-              <div className="identity-linker__success">
-                <h4 className="identity-linker__success-title">
-                  🎉 Cross-chain Transaction Successful!
-                </h4>
-                <div className="identity-linker__tx-details">
-                  <div className="identity-linker__tx-row">
-                    <span>Transaction Hash:</span>
+              <div className="alert alert--success mb-6">
+                <div className="w-full">
+                  <h4 className="identity-success-title">
+                    🎉 Cross-chain Transaction Successful!
+                  </h4>
+                  <div className="identity-tx-details">
+                    <div className="identity-tx-row">
+                      <span>Transaction Hash:</span>
+                      <a 
+                        href={`https://sepolia.etherscan.io/tx/${txResult.hash}`} 
+                        target="_blank" 
+                        rel="noreferrer"
+                        className="identity-tx-link"
+                      >
+                        {txResult.hash.substring(0, 10)}...{txResult.hash.substring(txResult.hash.length - 6)}
+                      </a>
+                    </div>
+                    <div className="identity-tx-row">
+                      <span>LayerZero Fee:</span>
+                      <span>{txResult.fee} ETH</span>
+                    </div>
+                    <div className="identity-tx-row">
+                      <span>Gas Used:</span>
+                      <span>{txResult.gasUsed}</span>
+                    </div>
+                    <div className="identity-tx-row">
+                      <span>Block:</span>
+                      <span>{txResult.blockNumber}</span>
+                    </div>
                     <a 
-                      href={`https://sepolia.etherscan.io/tx/${txResult.hash}`} 
+                      href={txResult.layerZeroScan} 
                       target="_blank" 
                       rel="noreferrer"
-                      className="identity-linker__tx-link"
+                      className="identity-lz-link"
                     >
-                      {txResult.hash.substring(0, 10)}...{txResult.hash.substring(txResult.hash.length - 6)}
+                      🔍 Track on LayerZeroScan
                     </a>
                   </div>
-                  <div className="identity-linker__tx-row">
-                    <span>LayerZero Fee:</span>
-                    <span>{txResult.fee} ETH</span>
-                  </div>
-                  <div className="identity-linker__tx-row">
-                    <span>Gas Used:</span>
-                    <span>{txResult.gasUsed}</span>
-                  </div>
-                  <div className="identity-linker__tx-row">
-                    <span>Block:</span>
-                    <span>{txResult.blockNumber}</span>
-                  </div>
-                  <a 
-                    href={txResult.layerZeroScan} 
-                    target="_blank" 
-                    rel="noreferrer"
-                    className="identity-linker__lz-link"
-                  >
-                    🔍 Track on LayerZeroScan
-                  </a>
                 </div>
               </div>
             )}
 
-            <div className="identity-linker__addresses">
-              <h3 className="identity-linker__addresses-title">Your Linked Addresses</h3>
+            <div className="identity-addresses">
+              <h3 className="identity-addresses-title">Your Linked Addresses</h3>
               {linkedAddresses.length === 0 ? (
-                <p className="identity-linker__no-addresses">
+                <p className="identity-no-addresses">
                   No linked addresses found. Link your wallets above!
                 </p>
               ) : (
-                <ul className="identity-linker__addresses-list">
+                <ul className="identity-addresses-list">
                   {linkedAddresses.map((address, index) => (
-                    <li key={index} className="identity-linker__address-item">
+                    <li key={index} className="identity-address-item">
                       {address}
                     </li>
                   ))}
@@ -192,7 +194,7 @@ function IdentityLinker() {
           </div>
         )}
       </div>
-    </div>
+    </section>
   );
 }
 

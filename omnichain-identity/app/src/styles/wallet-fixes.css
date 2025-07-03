@@ -1,0 +1,107 @@
+/* Add to components.css */
+
+/* Wallet connector fixes */
+.wallet-address-container {
+  position: relative;
+  width: 100%;
+  z-index: 20;
+}
+
+/* Improved wallet buttons */
+.btn--connect {
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  transition: var(--transition-normal);
+}
+
+.btn--connect:hover {
+  background: var(--color-primary-dark);
+  transform: translateY(-1px);
+}
+
+.btn--connect:active {
+  transform: translateY(1px);
+}
+
+/* Fix for Solana adapter button */
+.solana-wallet-button {
+  background: var(--color-primary) !important;
+  transition: var(--transition-normal);
+  height: auto !important;
+  padding: var(--space-3) var(--space-4) !important;
+  border-radius: var(--radius-md) !important;
+  outline: none !important;
+}
+
+.solana-wallet-button:hover {
+  background: var(--color-primary-dark) !important;
+  transform: translateY(-1px);
+}
+
+.solana-wallet-button:active {
+  transform: translateY(1px);
+}
+
+/* Fix for EVM icon */
+.evm-icon {
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+}
+
+/* Wallet address hoverable indicator */
+.wallet-address::after {
+  content: '▼';
+  display: inline-block;
+  margin-left: var(--space-2);
+  font-size: 8px;
+  opacity: 0.7;
+  transform: translateY(-1px);
+}
+
+.wallet-context-menu {
+  min-width: 180px;
+  z-index: 50;
+}
+
+/* Overlay to prevent clicks through */
+.wallet-context-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+}
+
+/* Prevent the sidebar-nav from being covered by wallet-context-menu */
+.sidebar-nav {
+  position: relative;
+  z-index: 5;
+}
+
+/* Address */
+.wallet-address {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* Logo related styles */
+.logo-icon {
+  position: relative;
+  overflow: visible;
+}
+
+.logo-icon::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+  opacity: 0.5;
+  z-index: -1;
+}
