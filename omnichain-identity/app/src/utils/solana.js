@@ -2,7 +2,7 @@ import { PublicKey, SystemProgram, Transaction } from '@solana/web3.js';
 import { Buffer } from 'buffer';
 
 // Replace with your actual program ID after deployment
-export const IDENTITY_PROGRAM_ID = new PublicKey('41NCdrEvXhQ4mZgyJkmqYxL6A1uEmnraGj31UJ6PsXd3');
+export const IDENTITY_PROGRAM_ID = new PublicKey('DDyBRUnarV5xAdTn3XmjbhEGuiinCBRLT1tGkc33f5Fz');
 
 /**
  * Get linked EVM addresses for a Solana public key
