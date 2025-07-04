@@ -1,4 +1,4 @@
-# 🌐 OmniChainID — Decentralised Cross-Chain Identity Linker  
+# 🌐 OmniChainID — Decentralised Cross-Chain Identity Linker powered by Layerzero v2 
 
 ## 🚀 Overview  
 
