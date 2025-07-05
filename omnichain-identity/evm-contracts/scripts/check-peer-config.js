@@ -9,7 +9,7 @@ require("dotenv").config();
 async function main() {
     console.log("🔍 Checking Peer Configuration");
     
-    const provider = new ethers.JsonRpcProvider(process.env.SEPOLIA_RPC_URL);
+    const provider = new ethers.providers.JsonRpcProvider(process.env.SEPOLIA_RPC_URL);
     
     const contractAddress = process.env.IDENTITY_LINKER_ADDRESS;
     const solanaChainId = 40168;
