@@ -6,7 +6,7 @@ async function main() {
   console.log("🧪 Final Cross-Chain Test...");
 
   // Set up provider and signer
-  const provider = new ethers.JsonRpcProvider(process.env.SEPOLIA_RPC_URL);
+  const provider = new ethers.providers.JsonRpcProvider(process.env.SEPOLIA_RPC_URL);
   const signer = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
   
   console.log(`Using signer: ${signer.address}`);

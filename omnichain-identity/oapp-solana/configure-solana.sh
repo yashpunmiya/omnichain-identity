@@ -9,8 +9,8 @@ echo "🚀 Configuring Solana OApp for LayerZero V2..."
 
 # Configuration constants
 SOLANA_PROGRAM_ID="DDyBRUnarV5xAdTn3XmjbhEGuiinCBRLT1tGkc33f5Fz"
-EVM_CONTRACT_ADDRESS="0x429B3fc57dD1000eBd6eC9A77e7f3E0ABdD252fa"
-SEPOLIA_EID=40161
+EVM_CONTRACT_ADDRESS="0xB1e741BDe82434a7E5DcB805a89977be337A7ffA"
+SEPOLIA_EID=30161
 NETWORK="devnet"
 
 echo "📋 Configuration Details:"

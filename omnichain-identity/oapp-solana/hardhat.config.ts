@@ -61,6 +61,11 @@ const config: HardhatUserConfig = {
             url: process.env.RPC_URL_OP_SEPOLIA || 'https://optimism-sepolia.gateway.tenderly.co',
             accounts,
         },
+        'sepolia': {
+            eid: EndpointId.SEPOLIA_V2_TESTNET,
+            url: process.env.RPC_URL_SEPOLIA || 'https://sepolia.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
+            accounts,
+        },
         'solana-testnet': {
             eid: EndpointId.SOLANA_V2_TESTNET,
             url: process.env.RPC_URL_SOLANA_TESTNET || 'https://api.devnet.solana.com',

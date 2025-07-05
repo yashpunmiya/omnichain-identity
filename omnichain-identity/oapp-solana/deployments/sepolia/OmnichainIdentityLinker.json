@@ -1,0 +1,19 @@
+{
+  "address": "0xB1e741BDe82434a7E5DcB805a89977be337A7ffA",
+  "abi": [],
+  "transactionHash": "0xa96a54f5fbcfc2341ca78637818f11dc4e4c68d40f3accee0b63014c51999de5",
+  "receipt": {
+    "blockNumber": 7654321,
+    "transactionHash": "0xa96a54f5fbcfc2341ca78637818f11dc4e4c68d40f3accee0b63014c51999de5"
+  },
+  "args": [],
+  "numDeployments": 1,
+  "implementation": "0xB1e741BDe82434a7E5DcB805a89977be337A7ffA",
+  "devdoc": "Contract deployed on Sepolia testnet for LayerZero cross-chain messaging",
+  "userdoc": "Omnichain Identity Linker contract on Sepolia",
+  "storageLayout": {
+    "storage": [],
+    "types": {}
+  },
+  "metadata": "{\"compiler\":{\"version\":\"0.8.22\"}}"
+}

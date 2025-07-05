@@ -1,6 +1,7 @@
 import assert from 'assert'
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
+import os from 'node:os'
 
 import {
     fetchAddressLookupTable,
@@ -41,16 +42,53 @@ const LOOKUP_TABLE_ADDRESS: Partial<Record<EndpointId, PublicKey>> = {
     [EndpointId.SOLANA_V2_TESTNET]: publicKey('9thqPdbR27A1yLWw2spwJLySemiGMXxPnEvfmXVk4KuK'),
 }
 
-// create a safe version of getKeypairFromFile that returns undefined if the file does not exist, for checking the default keypair
-async function safeGetKeypairDefaultPath(filePath?: string) {
+// Helper function to convert keypair from helpers library to web3.js keypair
+function convertKeypair(keypair: any): Keypair {
+    if (keypair && keypair.secretKey) {
+        return Keypair.fromSecretKey(keypair.secretKey)
+    }
+    return keypair
+}
+
+// Helper function to safely get keypair from environment
+function safeGetKeypairFromEnvironment(envVar: string): Keypair | undefined {
     try {
-        return await getKeypairFromFile(filePath)
+        const keypair = getKeypairFromEnvironment(envVar)
+        return convertKeypair(keypair)
     } catch (error) {
-        // If the error is due to the file not existing, return undefined
-        if (error instanceof Error && error.message.includes('Could not read keypair')) {
+        console.log(`Error loading keypair from ${envVar}:`, error instanceof Error ? error.message : error)
+        return undefined
+    }
+}
+
+// Helper function to safely get keypair from file path
+async function safeGetKeypairFromFile(filePath: string): Promise<Keypair | undefined> {
+    try {
+        const keypair = await getKeypairFromFile(filePath)
+        return convertKeypair(keypair)
+    } catch (error) {
+        console.log(`Error loading keypair from ${filePath}:`, error instanceof Error ? error.message : error)
+        return undefined
+    }
+}
+async function safeGetKeypairDefaultPath(): Promise<Keypair | undefined> {
+    try {
+        // Construct the Windows-compatible default path
+        const homeDir = os.homedir()
+        const defaultKeypairPath = path.join(homeDir, '.config', 'solana', 'id.json')
+        
+        console.log(`Looking for keypair at: ${defaultKeypairPath}`)
+        
+        if (!existsSync(defaultKeypairPath)) {
+            console.log('Default keypair file does not exist')
             return undefined
         }
-        throw error // Rethrow if it's a different error
+        
+        const keypairData = JSON.parse(readFileSync(defaultKeypairPath, 'utf8'))
+        return Keypair.fromSecretKey(new Uint8Array(keypairData))
+    } catch (error) {
+        console.log('Error loading default keypair:', error instanceof Error ? error.message : error)
+        return undefined
     }
 }
 
@@ -66,10 +104,10 @@ async function getSolanaKeypair(readOnly = false): Promise<Keypair> {
 
     // Attempt to load from each source
     const keypairEnvPrivate = process.env.SOLANA_PRIVATE_KEY
-        ? getKeypairFromEnvironment('SOLANA_PRIVATE_KEY')
+        ? safeGetKeypairFromEnvironment('SOLANA_PRIVATE_KEY')
         : undefined // #1 SOLANA_PRIVATE_KEY
     const keypairEnvPath = process.env.SOLANA_KEYPAIR_PATH
-        ? await getKeypairFromFile(process.env.SOLANA_KEYPAIR_PATH)
+        ? await safeGetKeypairFromFile(process.env.SOLANA_KEYPAIR_PATH)
         : undefined // #2 SOLANA_KEYPAIR_PATH
     const keypairDefaultPath = await safeGetKeypairDefaultPath() // #3 ~/.config/solana/id.json
 
@@ -109,15 +147,19 @@ async function getSolanaKeypair(readOnly = false): Promise<Keypair> {
     }
 
     // Otherwise, default path is the last fallback
-    logger.info(
-        `No environment-based keypair found. Found keypair at default path => ${keypairDefaultPath.publicKey.toBase58()}`
-    )
-    const doContinue = await promptToContinue(
-        `Defaulting to ~/.config/solana/id.json with address ${keypairDefaultPath.publicKey.toBase58()}. Use this keypair?`
-    )
-    if (!doContinue) process.exit(1)
+    if (keypairDefaultPath) {
+        logger.info(
+            `No environment-based keypair found. Found keypair at default path => ${keypairDefaultPath.publicKey.toBase58()}`
+        )
+        const doContinue = await promptToContinue(
+            `Defaulting to ~/.config/solana/id.json with address ${keypairDefaultPath.publicKey.toBase58()}. Use this keypair?`
+        )
+        if (!doContinue) process.exit(1)
 
-    return keypairDefaultPath
+        return keypairDefaultPath
+    }
+
+    throw new Error('No valid keypair found after checking all sources.')
 }
 
 /**

@@ -7,7 +7,7 @@ import { getSolanaOAppAddress } from './tasks/solana'
 
 const sepoliaContract: OmniPointHardhat = {
     eid: EndpointId.SEPOLIA_V2_TESTNET,
-    address: '0x429B3fc57dD1000eBd6eC9A77e7f3E0ABdD252fa', // Your deployed EVM contract
+    address: '0xB1e741BDe82434a7E5DcB805a89977be337A7ffA', // Updated EVM contract address
 }
 
 const solanaContract: OmniPointHardhat = {
