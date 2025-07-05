@@ -12,9 +12,9 @@ async function main() {
     
     // Configuration
     const provider = new ethers.providers.JsonRpcProvider(process.env.SEPOLIA_RPC_URL);
-    const contractAddress = "0x429B3fc57dD1000eBd6eC9A77e7f3E0ABdD252fa"; // Correct sending contract
-    const solanaProgram = "DDyBRUnarV5xAdTn3XmjbhEGuiinCBRLT1tGkc33f5Fz"; // Correct Solana program
-    const solanaEid = 40168; // Correct Solana EID (40168, not 40161!)
+    const contractAddress = process.env.IDENTITY_LINKER_ADDRESS; // Use from .env
+    const solanaProgram = process.env.SOLANA_PROGRAM_ADDRESS; // Use from .env
+    const solanaEid = parseInt(process.env.SOLANA_EID); // Use from .env
     
     console.log("📋 Configuration:");
     console.log("  EVM Contract:", contractAddress);

@@ -6,7 +6,7 @@ async function main() {
   
   // Configuration
   const provider = new ethers.providers.JsonRpcProvider(process.env.SEPOLIA_RPC_URL);
-  const EVM_CONTRACT_ADDRESS = "0x429B3fc57dD1000eBd6eC9A77e7f3E0ABdD252fa";
+  const EVM_CONTRACT_ADDRESS = process.env.IDENTITY_LINKER_ADDRESS;
   const TEST_SOLANA_ADDRESS = "2rGoi61G14p7JoR4Ag1oLgqSEjqJd8Ljr8RsUnHviRq2rqko3nJJpmHP4nfeJqbhsy4RPo9RqMFxGMQ9iKURKprg";
   
   // Create wallet

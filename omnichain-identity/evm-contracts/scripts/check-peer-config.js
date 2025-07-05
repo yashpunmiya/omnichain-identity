@@ -21,7 +21,6 @@ async function main() {
     // Enhanced contract ABI
     const contractABI = [
         "function peers(uint32) external view returns (bytes32)",
-        "function isPeer(uint32 _eid, bytes32 _peer) external view returns (bool)",
         "function owner() external view returns (address)",
         "function SOLANA_CHAIN_ID() external view returns (uint32)"
     ];
@@ -54,10 +53,6 @@ async function main() {
                 
             } else {
                 console.log("✅ Peer is configured");
-                
-                // Test if peer is recognized
-                const isPeerValid = await contract.isPeer(solanaChainId, peer);
-                console.log("✅ Is Valid Peer:", isPeerValid);
             }
             
         } catch (peerError) {

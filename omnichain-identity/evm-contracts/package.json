@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "@layerzerolabs/lz-definitions": "^2.3.0",
+    "@layerzerolabs/lz-evm-messagelib-v2": "^2.3.44",
     "@layerzerolabs/lz-evm-protocol-v2": "^2.3.0",
     "@layerzerolabs/oapp-evm": "^0.0.4",
     "@layerzerolabs/toolbox-hardhat": "^0.2.24",

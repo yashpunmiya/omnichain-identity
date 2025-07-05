@@ -2,6 +2,7 @@
 pragma solidity ^0.8.20;
 
 import "@layerzerolabs/oapp-evm/contracts/oapp/OApp.sol";
+import "@layerzerolabs/oapp-evm/contracts/oapp/libs/OptionsBuilder.sol";
 
 /**
  * @title OmnichainIdentityLinker
@@ -9,6 +10,7 @@ import "@layerzerolabs/oapp-evm/contracts/oapp/OApp.sol";
  * This contract sends messages from EVM chains to a Solana OApp
  */
 contract OmnichainIdentityLinker is OApp {
+    using OptionsBuilder for bytes;
     // Solana chain ID in LayerZero V2
     uint32 public constant SOLANA_CHAIN_ID = 40168; // Solana DEVNET chain ID in LZ V2
 
@@ -48,7 +50,7 @@ contract OmnichainIdentityLinker is OApp {
         emit IdentityLinked(msg.sender, bytes(_solanaAddress), block.timestamp);
 
         // Prepare messaging parameters for LayerZero V2
-        bytes memory options = bytes(""); // Use empty options for now
+        bytes memory options = OptionsBuilder.newOptions().addExecutorLzReceiveOption(200000, 0);
         
         // Send message to Solana via LayerZero V2
         MessagingFee memory fee = _quote(SOLANA_CHAIN_ID, payload, options, false);
@@ -175,8 +177,8 @@ contract OmnichainIdentityLinker is OApp {
         
         bytes memory payload = bytes(message);
         
-        // Use empty options for compatibility
-        bytes memory options = bytes("");
+        // Build proper options with gas limit for destination execution
+        bytes memory options = OptionsBuilder.newOptions().addExecutorLzReceiveOption(200000, 0);
         
         MessagingFee memory fee = _quote(SOLANA_CHAIN_ID, payload, options, false);
         return fee.nativeFee;

@@ -39,9 +39,9 @@ async function main() {
   const OmnichainIdentityLinker = await hre.ethers.getContractFactory("OmnichainIdentityLinker");
   const identityLinker = await OmnichainIdentityLinker.deploy(lzEndpoint, delegateAddress);
 
-  await identityLinker.waitForDeployment();
+  await identityLinker.deployed();
   
-  const deployedAddress = await identityLinker.getAddress();
+  const deployedAddress = identityLinker.address;
   console.log(`OmnichainIdentityLinker deployed to: ${deployedAddress}`);
   console.log("Save this address for configuring your frontend!");
   

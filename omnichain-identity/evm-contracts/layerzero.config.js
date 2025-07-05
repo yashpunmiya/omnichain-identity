@@ -4,12 +4,11 @@ const { EndpointId } = require('@layerzerolabs/lz-definitions');
 const sepoliaContract = {
     eid: EndpointId.SEPOLIA_V2_TESTNET,
     contractName: 'OmnichainIdentityLinker',
-    address: '0x2023475EAee9f4FEE306ce803F9832D9A1B2Ac4c',
+    address: '0xc528A86A786A75271BF01C804DdF33e49Cae75Ea',
 };
 
 const solanaContract = {
     eid: EndpointId.SOLANA_V2_TESTNET,
-    contractName: 'MyOApp',
     address: 'DDyBRUnarV5xAdTn3XmjbhEGuiinCBRLT1tGkc33f5Fz',
 };
 
